@@ -1,11 +1,12 @@
 package com.eduardoSantiag0.btg_order_reporting.services;
 
+import com.eduardoSantiag0.btg_order_reporting.application.services.PedidoMapper;
 import com.eduardoSantiag0.btg_order_reporting.domain.Item;
 import com.eduardoSantiag0.btg_order_reporting.domain.OrderMessage;
-import com.eduardoSantiag0.btg_order_reporting.infra.PedidoMapper;
 import com.eduardoSantiag0.btg_order_reporting.infra.entities.OrderEntity;
 import com.eduardoSantiag0.btg_order_reporting.infra.entities.PurchasedItemsEntity;
 import com.eduardoSantiag0.btg_order_reporting.infra.repositories.interfaces.IRepository;
+import com.eduardoSantiag0.btg_order_reporting.infra.messaging.processors.OrderProcessor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,9 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.sql.Array;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -48,7 +47,7 @@ class OrderProcessorTest {
         ).toArray(new Item[0]);
 
         this.orderMessage = new OrderMessage(1001L, 1L, items);
-        this.orderEntity = new OrderEntity(orderMessage.orderCode(), new BigDecimal("20"), orderMessage.clienteCode());
+        this.orderEntity = new OrderEntity(orderMessage.orderId(), new BigDecimal("20"), orderMessage.customerId());
 
         this.item1 = new PurchasedItemsEntity(orderEntity, items[0].productName(),items[0].quantity(), items[0].price());
         this.item2 = new PurchasedItemsEntity(orderEntity, items[1].productName(),items[1].quantity(), items[1].price());

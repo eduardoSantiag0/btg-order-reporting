@@ -1,14 +1,17 @@
-package com.eduardoSantiag0.btg_order_reporting.infra.controllers;
+package com.eduardoSantiag0.btg_order_reporting.application.services;
 
+import com.eduardoSantiag0.btg_order_reporting.application.services.report.EReportFormat;
 import com.eduardoSantiag0.btg_order_reporting.infra.dtos.OrderResponse;
 import com.eduardoSantiag0.btg_order_reporting.infra.dtos.PurchasedItemsResponse;
+import com.eduardoSantiag0.btg_order_reporting.infra.dtos.ReportInformation;
 import com.eduardoSantiag0.btg_order_reporting.infra.entities.OrderEntity;
 import com.eduardoSantiag0.btg_order_reporting.infra.repositories.interfaces.IRepository;
+import com.eduardoSantiag0.btg_order_reporting.application.services.report.strategy.ReportStrategyFactory;
+import com.eduardoSantiag0.btg_order_reporting.application.services.report.strategy.IReportGeneratorStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,11 +22,9 @@ public class OrderService {
     @Autowired
     private IRepository repository;
 
-//    private IReportGeneratorStrategy reportStrategy;
+    @Autowired
+    private ReportStrategyFactory strategyFactory;
 
-//
-//    private IReportGeneratorStrategy buildReportStrategy() {
-//    }
 
     public BigDecimal getTotalOrderValue(Long orderId) {
         Optional<OrderEntity> entity = repository.findByOrderId(orderId);
@@ -56,10 +57,20 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
-//    public ResponseEntity<?> generateCustomerReport(Long id, String format) {
-//
-//    }
+    public String generateCustomerReport(Long id, EReportFormat format) {
 
+        int numberOfOrders = this.getNumberOfOrdersByCustomer(id);
+        List<OrderResponse> orders = this.getAllOrdersByCustomer(id);
 
+        BigDecimal totalValueSpent = orders.stream()
+                .map(OrderResponse::orderValue)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
+        ReportInformation reportInformation = new ReportInformation(numberOfOrders, orders, totalValueSpent);
+
+        IReportGeneratorStrategy strategy = strategyFactory.getStrategy(format);
+
+        return strategy.generateReport(reportInformation);
+
+    }
 }

@@ -12,4 +12,6 @@ public interface IRepository {
     Optional<OrderEntity> findByOrderId(Long id);
     int getNumberOfOrdersByCustomer(Long id);
     List<OrderEntity>getAllOrderByCustomerId(Long id);
+
+    boolean existsByOrderCode(Long id);
 }

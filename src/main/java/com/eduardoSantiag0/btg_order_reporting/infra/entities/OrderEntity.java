@@ -4,18 +4,18 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
 @Table(name = "orders")
+@NoArgsConstructor
 public class OrderEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private Long orderId;
 
@@ -25,7 +25,7 @@ public class OrderEntity {
     @Column(name = "customer_id", nullable = false)
     private Long customerId;
 
-    //???
+    @Setter
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PurchasedItemsEntity> items;
 
@@ -34,4 +34,5 @@ public class OrderEntity {
         this.orderValue = orderValue;
         this.customerId = customerId;
     }
+
 }

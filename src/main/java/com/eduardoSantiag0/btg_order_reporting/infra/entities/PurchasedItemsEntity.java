@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
 
@@ -21,7 +19,7 @@ public class PurchasedItemsEntity {
     @Column(name = "purchased_item_id")
     private Long purchasedItemId ;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "order_id", nullable = false)
     private OrderEntity order;
 
@@ -40,4 +38,5 @@ public class PurchasedItemsEntity {
         this.quantity = quantity;
         this.price = price;
     }
+
 }

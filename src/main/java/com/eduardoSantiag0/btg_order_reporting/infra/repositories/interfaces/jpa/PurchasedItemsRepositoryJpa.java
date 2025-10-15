@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PurchasedItemsJpaRepository extends JpaRepository<PurchasedItemsEntity, Long> {
+public interface PurchasedItemsRepositoryJpa extends JpaRepository<PurchasedItemsEntity, Long> {
 //    int countByCustomerId(Long customerId);
 //    int countByOrder_CustomerId(Long customerId);
 }

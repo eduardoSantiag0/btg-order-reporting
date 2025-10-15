@@ -1,4 +1,4 @@
-package com.eduardoSantiag0.btg_order_reporting.infra;
+package com.eduardoSantiag0.btg_order_reporting.application.services;
 
 import com.eduardoSantiag0.btg_order_reporting.infra.entities.OrderEntity;
 import com.eduardoSantiag0.btg_order_reporting.infra.entities.PurchasedItemsEntity;
@@ -13,14 +13,13 @@ import java.util.List;
 public class PedidoMapper {
 
     public OrderEntity orderToEntity(OrderMessage orderMessage) {
-
         BigDecimal value = BigDecimal.ZERO;
         for (var i : orderMessage.items()) {
             value = value.add(i.price());
         }
 
-        return new OrderEntity(orderMessage.orderCode(), value,
-                orderMessage.clienteCode());
+        return new OrderEntity(orderMessage.orderId(), value,
+                orderMessage.customerId());
     }
 
     public List<PurchasedItemsEntity> purchasedItemsToEntity(OrderMessage orderMessage, OrderEntity entity) {

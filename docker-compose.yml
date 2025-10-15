@@ -1,4 +1,21 @@
 services:
+
+#  app:
+#    build: .
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - postgres
+#      - rabbitmq
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/btg-order-reporting
+#      SPRING_DATASOURCE_USERNAME: postgres
+#      SPRING_DATASOURCE_PASSWORD: password
+#    networks:
+#      - btg-network
+#    volumes:
+#      - ./logs:/app/logs  # <host>:<container>
+
   rabbitmq:
     image: rabbitmq:3-management-alpine
     environment:
@@ -12,12 +29,12 @@ services:
 
 #  postgres:
 #    image: postgres:16-alpine
-#    environment:
-#      - POSTGRES_DB=btg-order-reporting
-#      - POSTGRES_USER=root
-#      - POSTGRES_PASSWORD=password
 #    ports:
 #      - "5433:5432"
+#    environment:
+#      - POSTGRES_DB=btg-order-reporting
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=password
 #    networks:
 #      - btg-network
 

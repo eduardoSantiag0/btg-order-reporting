@@ -1,7 +1,8 @@
 package com.eduardoSantiag0.btg_order_reporting.infra.controllers;
 
+import com.eduardoSantiag0.btg_order_reporting.application.services.OrderService;
 import com.eduardoSantiag0.btg_order_reporting.infra.dtos.OrderResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.eduardoSantiag0.btg_order_reporting.application.services.report.EReportFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
@@ -39,5 +40,11 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
+    @GetMapping("/{customerId}/generate-report")
+    public ResponseEntity<String> getReport(@PathVariable(name = "customerId") Long customerId,
+                                            @RequestParam String format) {
+        String report = orderService.generateCustomerReport(customerId, EReportFormat.valueOf(format.toUpperCase()));
+        return ResponseEntity.ok(report);
+    }
 
 }

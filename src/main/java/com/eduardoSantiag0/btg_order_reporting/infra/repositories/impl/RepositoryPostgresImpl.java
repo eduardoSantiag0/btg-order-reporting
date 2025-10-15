@@ -4,7 +4,7 @@ import com.eduardoSantiag0.btg_order_reporting.infra.entities.OrderEntity;
 import com.eduardoSantiag0.btg_order_reporting.infra.entities.PurchasedItemsEntity;
 import com.eduardoSantiag0.btg_order_reporting.infra.repositories.interfaces.IRepository;
 import com.eduardoSantiag0.btg_order_reporting.infra.repositories.interfaces.jpa.OrderRepositoryJpa;
-import com.eduardoSantiag0.btg_order_reporting.infra.repositories.interfaces.jpa.PurchasedItemsJpaRepository;
+import com.eduardoSantiag0.btg_order_reporting.infra.repositories.interfaces.jpa.PurchasedItemsRepositoryJpa;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,10 +14,10 @@ import java.util.Optional;
 public class RepositoryPostgresImpl implements IRepository {
 
     private final OrderRepositoryJpa orderRepository;
-    private final PurchasedItemsJpaRepository purchasedItemsRepository;
+    private final PurchasedItemsRepositoryJpa purchasedItemsRepository;
 
     public RepositoryPostgresImpl(OrderRepositoryJpa orderRepository,
-                                  PurchasedItemsJpaRepository purchasedItemsRepository) {
+                                  PurchasedItemsRepositoryJpa purchasedItemsRepository) {
         this.orderRepository = orderRepository;
         this.purchasedItemsRepository = purchasedItemsRepository;
     }
@@ -48,5 +48,10 @@ public class RepositoryPostgresImpl implements IRepository {
     @Override
     public List<OrderEntity> getAllOrderByCustomerId(Long id) {
         return orderRepository.findAllByCustomerId(id);
+    }
+
+    @Override
+    public boolean existsByOrderCode(Long id) {
+        return orderRepository.existsById(id);
     }
 }

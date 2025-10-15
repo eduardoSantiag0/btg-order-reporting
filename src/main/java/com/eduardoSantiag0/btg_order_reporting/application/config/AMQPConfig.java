@@ -1,11 +1,8 @@
-package com.eduardoSantiag0.btg_order_reporting.config;
+package com.eduardoSantiag0.btg_order_reporting.application.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -20,6 +17,7 @@ public class AMQPConfig {
 
     private final String EXCHANGE_NAME = "order.direct";
     private final String QUEUE_NAME = "order-to-report";
+    private final String DLQ_NAME = "order-to-report.dlq";
     private final String ROUTING_KEY_ORDERS = "order-report";
 
 
@@ -33,9 +31,16 @@ public class AMQPConfig {
         return event -> rabbitAdmin.initialize();
     }
 
+//    public Queue orderQueue() {
+//        return new Queue(QUEUE_NAME);
+//    }
+
     @Bean
     public Queue orderQueue() {
-        return new Queue(QUEUE_NAME);
+        return QueueBuilder.durable(QUEUE_NAME)
+                .withArgument("x-dead-letter-exchange", EXCHANGE_NAME)
+                .withArgument("x-dead-letter-routing-key", ROUTING_KEY_ORDERS + ".dlq")
+                .build();
     }
 
     @Bean
@@ -44,16 +49,29 @@ public class AMQPConfig {
     }
 
     @Bean
-    public Binding bindingQueueToExcahnge() {
+    public Binding bindingQueueToExchange() {
         return BindingBuilder.bind(orderQueue())
                 .to(directExchange())
                 .with(ROUTING_KEY_ORDERS);
     }
 
     @Bean
+    public Queue deadLetterQueue() {
+        return QueueBuilder.durable(DLQ_NAME).build();
+    }
+
+    //* Bind com DLQ
+    @Bean
+    public Binding bindingDlqToExchange() {
+        return BindingBuilder.bind(deadLetterQueue())
+                .to(directExchange())
+                .with(ROUTING_KEY_ORDERS + ".dlq");
+    }
+
+    @Bean
     public Jackson2JsonMessageConverter messageConverter(){
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());  //* LocalDateTime
+        objectMapper.registerModule(new JavaTimeModule());
         return new Jackson2JsonMessageConverter(objectMapper);
     }
 

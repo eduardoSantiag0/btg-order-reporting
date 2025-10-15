@@ -3,6 +3,7 @@ package com.eduardoSantiag0.btg_order_reporting.infra;
 import com.eduardoSantiag0.btg_order_reporting.domain.Item;
 import com.eduardoSantiag0.btg_order_reporting.domain.OrderMessage;
 import com.eduardoSantiag0.btg_order_reporting.infra.entities.OrderEntity;
+import com.eduardoSantiag0.btg_order_reporting.application.services.PedidoMapper;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
