@@ -1,4 +1,4 @@
-package com.eduardoSantiag0.btg_order_reporting.application.config;
+package com.eduardoSantiag0.btg_order_reporting.messaging.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

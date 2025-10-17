@@ -1,7 +1,7 @@
-package com.eduardoSantiag0.btg_order_reporting.infra.messaging;
+package com.eduardoSantiag0.btg_order_reporting.messaging;
 
 import com.eduardoSantiag0.btg_order_reporting.domain.OrderMessage;
-import com.eduardoSantiag0.btg_order_reporting.infra.messaging.processors.OrderProcessor;
+import com.eduardoSantiag0.btg_order_reporting.messaging.processors.OrderProcessor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Payload;

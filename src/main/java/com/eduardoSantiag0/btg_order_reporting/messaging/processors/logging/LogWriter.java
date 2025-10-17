@@ -1,6 +1,6 @@
-package com.eduardoSantiag0.btg_order_reporting.infra.messaging.processors.logging;
+package com.eduardoSantiag0.btg_order_reporting.messaging.processors.logging;
 
-import com.eduardoSantiag0.btg_order_reporting.application.errors.InvalidOrderMessageException;
+import com.eduardoSantiag0.btg_order_reporting.messaging.errors.InvalidOrderMessageException;
 import com.eduardoSantiag0.btg_order_reporting.domain.OrderMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

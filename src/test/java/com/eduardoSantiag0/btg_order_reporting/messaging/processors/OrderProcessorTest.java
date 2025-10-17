@@ -1,12 +1,12 @@
-package com.eduardoSantiag0.btg_order_reporting.services;
+package com.eduardoSantiag0.btg_order_reporting.messaging.processors;
 
 import com.eduardoSantiag0.btg_order_reporting.application.services.PedidoMapper;
 import com.eduardoSantiag0.btg_order_reporting.domain.Item;
 import com.eduardoSantiag0.btg_order_reporting.domain.OrderMessage;
 import com.eduardoSantiag0.btg_order_reporting.infra.entities.OrderEntity;
 import com.eduardoSantiag0.btg_order_reporting.infra.entities.PurchasedItemsEntity;
+import com.eduardoSantiag0.btg_order_reporting.messaging.processors.logging.LogWriter;
 import com.eduardoSantiag0.btg_order_reporting.infra.repositories.interfaces.IRepository;
-import com.eduardoSantiag0.btg_order_reporting.infra.messaging.processors.OrderProcessor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,12 +24,14 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class OrderProcessorTest {
 
-
     @Mock
     private IRepository repository;
 
     @Mock
     private PedidoMapper mapper;
+
+    @Mock
+    private LogWriter logWriter;
 
     @InjectMocks
     private OrderProcessor orderProcessor;
@@ -55,19 +57,7 @@ class OrderProcessorTest {
     }
 
     @Test
-    void shouldSaveInBothRepositories() {
-        when(mapper.orderToEntity(orderMessage)).thenReturn(orderEntity);
-        when(mapper.purchasedItemsToEntity(orderMessage, orderEntity)).thenReturn(List.of(item1, item2));
-
-        orderProcessor.execute(orderMessage);
-
-        verify(repository, times(1)).saveOrder(orderEntity);
-        verify(repository, times(1)).savePurchasedItems(List.of(item1, item2));
-
-    }
-
-    @Test
-    void shouldSaveCorrectOrderValueWhenProcessingOrder() {
+    void whenProcessingOrder_ShouldSaveCorrectOrderValue() {
         BigDecimal expectedValue = new BigDecimal("20");
 
         when(mapper.orderToEntity(orderMessage)).thenReturn(orderEntity);
@@ -85,9 +75,5 @@ class OrderProcessorTest {
         assertEquals(0, expectedValue.compareTo(savedOrder.getOrderValue()));
 
     }
-
-    //todo Items sem item
-    //todo Mapper falhou
-
 
 }

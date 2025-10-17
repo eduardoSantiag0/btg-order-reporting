@@ -51,7 +51,7 @@ public class RepositoryPostgresImpl implements IRepository {
     }
 
     @Override
-    public boolean existsByOrderCode(Long id) {
+    public boolean existsByOrderId(Long id) {
         return orderRepository.existsById(id);
     }
 }

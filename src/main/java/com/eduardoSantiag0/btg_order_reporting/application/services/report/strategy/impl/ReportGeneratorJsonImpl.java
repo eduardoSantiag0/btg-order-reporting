@@ -11,5 +11,7 @@ public class ReportGeneratorJsonImpl implements IReportGeneratorStrategy {
     public String generateReport(ReportInformation info) {
         Gson gson = new Gson();
         return gson.toJson(info);
+//        System.out.println(json + "\n\n");
+//        return json;
     }
 }

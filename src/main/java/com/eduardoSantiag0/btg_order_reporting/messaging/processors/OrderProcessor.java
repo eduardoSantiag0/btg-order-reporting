@@ -1,8 +1,8 @@
-package com.eduardoSantiag0.btg_order_reporting.infra.messaging.processors;
+package com.eduardoSantiag0.btg_order_reporting.messaging.processors;
 
-import com.eduardoSantiag0.btg_order_reporting.application.errors.*;
 import com.eduardoSantiag0.btg_order_reporting.domain.Item;
-import com.eduardoSantiag0.btg_order_reporting.infra.messaging.processors.logging.LogWriter;
+import com.eduardoSantiag0.btg_order_reporting.messaging.errors.*;
+import com.eduardoSantiag0.btg_order_reporting.messaging.processors.logging.LogWriter;
 import com.eduardoSantiag0.btg_order_reporting.infra.repositories.interfaces.IRepository;
 import com.eduardoSantiag0.btg_order_reporting.infra.entities.OrderEntity;
 import com.eduardoSantiag0.btg_order_reporting.domain.OrderMessage;
@@ -11,6 +11,7 @@ import com.eduardoSantiag0.btg_order_reporting.infra.entities.PurchasedItemsEnti
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -46,21 +47,24 @@ public class OrderProcessor {
                 throw new ZeroOrNegativeNumberException("Item quantity must be positive");
             }
 
+            if (item.price() == null || item.price().compareTo(BigDecimal.ZERO) <= 0) {
+                throw new ZeroOrNegativeNumberException("Item price must be positive");
+            }
+
             if (item.productName() == null || item.productName().isBlank()) {
                 throw new InvalidProductNameException("Product name cannot be empty");
             }
         }
 
-        if (repository.existsByOrderCode(order.orderId())) {
+        if (repository.existsByOrderId(order.orderId())) {
             throw new OrderIdAlreadyExistsException("Order ID already exists: " + order.orderId());
         }
     }
 
     @Transactional
     public void execute(OrderMessage order) {
+        validadeOrder(order);
         try {
-            validadeOrder(order);
-            System.out.println("\nVALID\n");
 
             OrderEntity orderEntity = mapper.orderToEntity(order);
             List<PurchasedItemsEntity> purchasedItemsEntity = mapper.purchasedItemsToEntity(order, orderEntity);
@@ -71,7 +75,6 @@ public class OrderProcessor {
             logWriter.logValidOrder(order);
 
         } catch (InvalidOrderMessageException ex) {
-            System.out.println("INVALID");
             failedOrdersProcessor.handleError(order, ex);
             logWriter.logInvalidOrder(order, ex);
         }
