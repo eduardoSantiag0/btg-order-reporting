@@ -1,4 +1,3 @@
-
 ## 🧮 Processamento Assíncrono de Pedidos
 
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
@@ -12,7 +11,7 @@ Um microserviço desenvolvido em Java Spring Boot para consumo de mensagens de u
 
 ---
 
-### ❗Descrição do Desafio
+### 🤺 Descrição do Desafio
 
 O objetivo do desafio é criar uma aplicação que:
 
@@ -22,11 +21,11 @@ O objetivo do desafio é criar uma aplicação que:
 
 3. Disponibilize uma API REST que permita consultar:
 
-- 🏅 Valor total de um pedido.
+- 🥇  Valor total de um pedido.
 
-- 🏅 Quantidade de pedidos por cliente.
+- 🥈 Quantidade de pedidos por cliente.
 
-- 🏅 Lista de pedidos realizados por cliente.
+- 🥉 Lista de pedidos realizados por cliente.
 
 
 
@@ -105,13 +104,25 @@ Base URL: ``http://localhost:8080/api/v1/customers``
 
 ---
 
+⚠️ Tratamento de Erros
+
+- Validações customizadas:
+    - Pedido com ``orderId`` nulo ou <= 0 → ``ZeroOrNegativeNumberException``.
+    - Ordem sem itens → ``NoItemsInMessageException``.
+    - Item com quantidade <= 0 ou preço nulo/menor ou igual a 0 → ``ZeroOrNegativeNumberException``.
+    - Nome do produto vazio ou em branco → ``InvalidProductNameException``.
+    - Pedido já existente (orderId duplicado) → ``OrderIdAlreadyExistsException``.
+- Em caso de erro na mensagem, o serviço encaminha para a DLQ para posterior análise.
+
+---
+
 #### 📨 Como Iniciar a Aplicação
+1. **Suba os serviços com Docker Compose**:
 ```bash
 docker-compose up --build
 ```
 
-Serviços disponíveis:
-
+Serviços iniciados:
 - **API**: http://localhost:8080
 
 - **PostgreSQL**: localhost:5433
@@ -119,3 +130,9 @@ Serviços disponíveis:
 - **RabbitMQ Management UI**: http://localhost:15672
  (user: guest / pass: guest)
 
+2. **Documentação da API via Swagger**
+- Acesse em:
+
+```bash
+http://localhost:8080/swagger-ui.html
+```
