@@ -1,5 +1,5 @@
-## 🧮 Processamento Assíncrono de Pedidos
 
+# 🧮 Processamento Assíncrono de Pedidos
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
 ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
@@ -7,11 +7,13 @@
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
 
+[![Build & Push Docker Image](https://github.com/eduardoSantiag0/btg-order-reporting/actions/workflows/build-and-publish.yml/badge.svg)](https://github.com/eduardoSantiag0/btg-order-reporting/actions/workflows/build-and-publish.yml)
+
 Um microserviço desenvolvido em Java Spring Boot para consumo de mensagens de uma fila RabbitMQ, persistência em PostgreSQL, e exposição de uma API REST para consulta de relatórios de pedidos por cliente.
 
 ---
 
-### 🤺 Descrição do Desafio
+## 🤺 Descrição do Desafio
 
 O objetivo do desafio é criar uma aplicação que:
 
@@ -68,7 +70,7 @@ Aplicação baseada no desafio original:
 - JaCoCo (cobertura de testes)
 
 ---
-### 🕳️🐇 Fluxo de Processamento
+## 🕳️🐇 Fluxo de Processamento
 
 1. Uma mensagem é publicada na fila RabbitMQ (order-reporting).
 2. O serviço OrderProcessor consome a mensagem, valida os campos e salva no banco.
@@ -80,7 +82,7 @@ Aplicação baseada no desafio original:
 
 ---
 
-### 💥 Conceitos Aplicados
+## 💥 Conceitos Aplicados
 
 - **Domain-Driven Design (DDD)**: separação clara entre camadas domain, application, infra e messaging.
 - **Strategy Pattern**: geração de relatórios em múltiplos formatos.
@@ -104,7 +106,7 @@ Base URL: ``http://localhost:8080/api/v1/customers``
 
 ---
 
-⚠️ Tratamento de Erros
+### ⚠️ Tratamento de Erros
 
 - Validações customizadas:
     - Pedido com ``orderId`` nulo ou <= 0 → ``ZeroOrNegativeNumberException``.
@@ -116,7 +118,25 @@ Base URL: ``http://localhost:8080/api/v1/customers``
 
 ---
 
-#### 📨 Como Iniciar a Aplicação
+### 🧪 Cobertura de Testes com JaCoCo
+
+O projeto utiliza o JaCoCo para geração de relatórios de cobertura de testes automatizados.
+
+Para  gerar e abrir o relatório automaticamente após a execução dos testes:
+
+- **Windows (PowerShell):** ``generate-and-open-tests-report.ps1``
+- **Linux/macOS (Bash):** ``generate-and-open-tests-report.sh``
+
+```bash
+# Linux / macOS
+./generate-and-open-tests-report.sh
+
+# Windows PowerShell
+.\generate-and-open-tests-report.ps1
+```
+
+---
+## 📨 Como Iniciar a Aplicação
 1. **Suba os serviços com Docker Compose**:
 ```bash
 docker-compose up --build
